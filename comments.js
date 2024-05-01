@@ -1,11 +1,22 @@
-const http = require('http');
+// Create web server and listen on port 3000
+const express = require('express');
+const app = express();
+const port = 3000;
 
-const server = http.createServer((req, res) => {
-    res.statusCode = 200;
-    res.setHeader('Content-Type', 'text/plain');
-    res.end('Hello, world!');
+// Import the comments module
+const comments = require('./comments');
+
+// Get all comments
+app.get('/comments', (req, res) => {
+  res.json(comments);
 });
 
-server.listen(3000, 'localhost', () => {
-    console.log('Server running at http://localhost:3000/');
+// Get comments by ID
+app.get('/comments/:id', (req, res) => {
+  const comment = comments.find(comment => comment.id === parseInt(req.params.id));
+  res.json(comment);
+});
+
+app.listen(port, () => {
+  console.log(`Server is listening on port ${port}`);
 });
